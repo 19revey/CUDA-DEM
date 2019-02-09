@@ -1,0 +1,28 @@
+INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/common/inc")
+INCLUDE_DIRECTORIES("${CMAKE_BINARY_DIR}/src")
+
+SET(EXECUTABLE_OUTPUT_PATH "../")
+INCLUDE(FindCUDA)
+
+
+SET(CUDA_NVCC_FLAGS
+    "--relocatable-device-code=false -gencode arch=compute_53,code=compute_53 -gencode arch=compute_53,code=sm_53")
+
+SET(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
+message(${CMAKE_CXX_FLAGS})
+
+SET(LIBRARY_PATH "/usr/local/cuda-7.5/samples/common/lib/linux/x86_64")
+
+#find_package(GLEW REQUIRED)
+#if (GLEW_FOUND)
+    link_directories(${LIBRARY_PATH})
+    link_libraries(GLEW GL GLU X11 Xi Xmu glut)
+#endif()
+#message(${GLEW})
+
+
+CUDA_ADD_EXECUTABLE(sphere
+    particles.cpp particleSystem.cpp particleSystem_cuda.cu render_particles.cpp shaders.cpp)
+TARGET_LINK_LIBRARIES(sphere GLEW GL GLU X11 Xi Xmu glut)
+
+#ADD_EXECUTABLE()

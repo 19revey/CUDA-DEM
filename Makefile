@@ -121,6 +121,19 @@ depend:
 	$(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+#=============================================================================
+# Target rules for targets named sphere
+
+# Build rule for target.
+sphere: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 sphere
+.PHONY : sphere
+
+# fast build rule for target.
+sphere/fast:
+	$(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/build
+.PHONY : sphere/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -130,6 +143,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
+	@echo "... sphere"
 .PHONY : help
 
 

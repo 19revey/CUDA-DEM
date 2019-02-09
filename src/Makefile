@@ -121,6 +121,129 @@ depend:
 	cd /home/duan/code/NWDEM && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+# Convenience name for target.
+src/CMakeFiles/sphere.dir/rule:
+	cd /home/duan/code/NWDEM && $(MAKE) -f CMakeFiles/Makefile2 src/CMakeFiles/sphere.dir/rule
+.PHONY : src/CMakeFiles/sphere.dir/rule
+
+# Convenience name for target.
+sphere: src/CMakeFiles/sphere.dir/rule
+
+.PHONY : sphere
+
+# fast build rule for target.
+sphere/fast:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/build
+.PHONY : sphere/fast
+
+particleSystem.o: particleSystem.cpp.o
+
+.PHONY : particleSystem.o
+
+# target to build an object file
+particleSystem.cpp.o:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/particleSystem.cpp.o
+.PHONY : particleSystem.cpp.o
+
+particleSystem.i: particleSystem.cpp.i
+
+.PHONY : particleSystem.i
+
+# target to preprocess a source file
+particleSystem.cpp.i:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/particleSystem.cpp.i
+.PHONY : particleSystem.cpp.i
+
+particleSystem.s: particleSystem.cpp.s
+
+.PHONY : particleSystem.s
+
+# target to generate assembly for a file
+particleSystem.cpp.s:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/particleSystem.cpp.s
+.PHONY : particleSystem.cpp.s
+
+particles.o: particles.cpp.o
+
+.PHONY : particles.o
+
+# target to build an object file
+particles.cpp.o:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/particles.cpp.o
+.PHONY : particles.cpp.o
+
+particles.i: particles.cpp.i
+
+.PHONY : particles.i
+
+# target to preprocess a source file
+particles.cpp.i:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/particles.cpp.i
+.PHONY : particles.cpp.i
+
+particles.s: particles.cpp.s
+
+.PHONY : particles.s
+
+# target to generate assembly for a file
+particles.cpp.s:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/particles.cpp.s
+.PHONY : particles.cpp.s
+
+render_particles.o: render_particles.cpp.o
+
+.PHONY : render_particles.o
+
+# target to build an object file
+render_particles.cpp.o:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/render_particles.cpp.o
+.PHONY : render_particles.cpp.o
+
+render_particles.i: render_particles.cpp.i
+
+.PHONY : render_particles.i
+
+# target to preprocess a source file
+render_particles.cpp.i:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/render_particles.cpp.i
+.PHONY : render_particles.cpp.i
+
+render_particles.s: render_particles.cpp.s
+
+.PHONY : render_particles.s
+
+# target to generate assembly for a file
+render_particles.cpp.s:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/render_particles.cpp.s
+.PHONY : render_particles.cpp.s
+
+shaders.o: shaders.cpp.o
+
+.PHONY : shaders.o
+
+# target to build an object file
+shaders.cpp.o:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/shaders.cpp.o
+.PHONY : shaders.cpp.o
+
+shaders.i: shaders.cpp.i
+
+.PHONY : shaders.i
+
+# target to preprocess a source file
+shaders.cpp.i:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/shaders.cpp.i
+.PHONY : shaders.cpp.i
+
+shaders.s: shaders.cpp.s
+
+.PHONY : shaders.s
+
+# target to generate assembly for a file
+shaders.cpp.s:
+	cd /home/duan/code/NWDEM && $(MAKE) -f src/CMakeFiles/sphere.dir/build.make src/CMakeFiles/sphere.dir/shaders.cpp.s
+.PHONY : shaders.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -130,6 +253,19 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
+	@echo "... sphere"
+	@echo "... particleSystem.o"
+	@echo "... particleSystem.i"
+	@echo "... particleSystem.s"
+	@echo "... particles.o"
+	@echo "... particles.i"
+	@echo "... particles.s"
+	@echo "... render_particles.o"
+	@echo "... render_particles.i"
+	@echo "... render_particles.s"
+	@echo "... shaders.o"
+	@echo "... shaders.i"
+	@echo "... shaders.s"
 .PHONY : help
 
 

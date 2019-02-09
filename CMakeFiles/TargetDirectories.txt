@@ -4,3 +4,4 @@
 /home/duan/code/NWDEM/src/CMakeFiles/rebuild_cache.dir
 /home/duan/code/NWDEM/src/CMakeFiles/edit_cache.dir
 /home/duan/code/NWDEM/src/CMakeFiles/test.dir
+/home/duan/code/NWDEM/src/CMakeFiles/sphere.dir
