@@ -4,10 +4,10 @@ file(MAKE_DIRECTORY input)
 file(MAKE_DIRECTORY output)
 
 
-project(AUTO-Yifei)
+project(comp)
 
 cmake_minimum_required(VERSION 2.8)
 find_package(CUDA REQUIRED)
-
+enable_testing()
 message(STATUS ${CMAKE_BINARY_DIR})
 #add_subdirectory(src)

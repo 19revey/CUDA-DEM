@@ -8,6 +8,6 @@ project(comp)
 
 cmake_minimum_required(VERSION 2.8)
 find_package(CUDA REQUIRED)
-
+enable_testing()
 message(STATUS ${CMAKE_BINARY_DIR})
-#add_subdirectory(src)
+add_subdirectory(src)
