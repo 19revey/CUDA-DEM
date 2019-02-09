@@ -11,7 +11,7 @@ SET(CUDA_NVCC_FLAGS
 SET(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
 message(${CMAKE_CXX_FLAGS})
 
-SET(LIBRARY_PATH "/usr/local/cuda-7.5/samples/common/lib/linux/x86_64")
+SET(LIBRARY_PATH "${CMAKE_BINARY_DIR}/common/lib/linux/x86_64")
 
 #find_package(GLEW REQUIRED)
 #if (GLEW_FOUND)
@@ -23,6 +23,6 @@ SET(LIBRARY_PATH "/usr/local/cuda-7.5/samples/common/lib/linux/x86_64")
 
 CUDA_ADD_EXECUTABLE(sphere
     particles.cpp particleSystem.cpp particleSystem_cuda.cu render_particles.cpp shaders.cpp)
-#TARGET_LINK_LIBRARIES(sphere GLEW GL GLU X11 Xi Xmu glut)
+TARGET_LINK_LIBRARIES(sphere GLEW GL GLU X11 Xi Xmu glut)
 
 #ADD_EXECUTABLE()
