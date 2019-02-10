@@ -21,7 +21,7 @@ SET(LIBRARY_PATH "${CMAKE_BINARY_DIR}/common/lib/linux/x86_64")
 #message(${GLEW})
 
 
-CUDA_ADD_EXECUTABLE(sphere
+CUDA_ADD_EXECUTABLE(NWDEM
     particles.cpp particleSystem.cpp particleSystem_cuda.cu render_particles.cpp shaders.cpp)
 TARGET_LINK_LIBRARIES(sphere GLEW GL GLU X11 Xi Xmu glut)
 
