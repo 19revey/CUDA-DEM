@@ -7,10 +7,12 @@ set(CMAKE_BUILD_FILES_DIRECTORY ${dir})
 set(CMAKE_BUILD_DIRECTORY ${dir})
 SET(EXECUTABLE_OUTPUT_PATH "../output")
 INCLUDE(FindCUDA)
-
+if (CUDA_FOUND)
+	message(CUDA found!)
+endif()
 
 SET(CUDA_NVCC_FLAGS
-    "--relocatable-device-code=false -gencode arch=compute_53,code=compute_53 -gencode arch=compute_53,code=sm_53")
+    "--relocatable-device-code=false -gencode arch=compute_50,code=compute_50 -gencode arch=compute_50,code=sm_50")
 
 SET(CMAKE_CXX_FLAGS "-fPIC ${CMAKE_CXX_FLAGS}")
 #message(${CMAKE_CXX_FLAGS})
