@@ -38,15 +38,22 @@
 #include "thrust/device_new.h"
 #include <time.h>
 
+
+#define RHO_L 3000.0f
+#define RHO_H 12000.0f
+#define ASD 40000.0f
+
 #ifndef CUDART_PI_F
 #define CUDART_PI_F         3.141592654f
 #define NUM_CONTACTS		32
-float   topWallPos= 0.4f; //was 0.045f //initial height of top wall, in meters
+float   topWallPos= 0.8f; //was 0.045f //initial height of top wall, in meters
 float   topWallVel = 0.0f;
-float   topWallMass = 1500*0.2871*0.0352*0.01*0.6;//0.34315f;// 4.0f* (2.0f+1.0f)/2.0f * 0.34315; //2.0f * 5.0f / 2.0f * (0.49078f/2.0f*64.0f/48.0f); //kg; equal to some value times the total weight of the particle bed; divided by two b/c I halved bed height; multiplied by 5/2 to make up for heavy particles with 4x density;
+float   topWallMass = (RHO_L+RHO_H)/2*0.6*0.01*0.2816*0.0352;//0.1f*0.34315f;// 4.0f* (2.0f+1.0f)/2.0f * 0.34315; //2.0f * 5.0f / 2.0f * (0.49078f/2.0f*64.0f/48.0f); //kg; equal to some value times the total weight of the particle bed; divided by two b/c I halved bed height; multiplied by 5/2 to make up for heavy particles with 4x density;
 float   topWallAcl = 0.0f;
-float   shearRate= 25.0f;
+float shearRate=25.0f;
 #endif
+
+
 
 ParticleSystem::ParticleSystem(uint numParticles, uint3 gridSize, bool bUseOpenGL, float smallRadius, float largeRadius, float gap) :
     m_bInitialized(false),
@@ -486,7 +493,7 @@ ParticleSystem::update(float deltaTime)
 {
     assert(m_bInitialized);
 
-	if(m_bOutput == 1 && stepCount % m_recordStep == 0 && stepCount > 1.0*40000.0f)			// File output
+	if(m_bOutput == 1 && stepCount % m_recordStep == 0 && stepCount > 2.0*ASD)			// File output
 	{
 		write2Bin();
 		printf("Step count %i\n",stepCount);
@@ -497,12 +504,12 @@ ParticleSystem::update(float deltaTime)
 
 	//	printf("Total Normal Force %f\n",*m_hTotalNormalForce); //print total normal force,to check what it is
 		//top wall HERE!
-		if (stepCount>0.5*40000.0f)
+		if (stepCount>0.2*ASD)
 		{
 			float topWallAclLast = topWallAcl;
 			float topWallVelLast = topWallVel;
 			topWallAcl = -*m_hTotalNormalForce/topWallMass - 9.81f; //negative of TNF, to stay consistent with up being positive
-				if (topWallPos> 0.15) //145changediameter
+				if (topWallPos> 0.0) //145changediameter
 				{
 					topWallVel += topWallAcl*deltaTime;
 					topWallPos += topWallVel*deltaTime;
@@ -1025,72 +1032,6 @@ void
 ParticleSystem::addParticles()
 {
 
-//	std::cout << "addParticles" << std::endl;
-//	int i = 0;
-//
-//	// First particle
-//
-//		for (int y = 0; y < m_numParticles; y++)
-//		{
-//			for (int x = 0; x < m_feedSpacing.x; x++)
-//			{
-//				for (int z = 0; z < m_feedSpacing.z; z++)
-//				{
-//					//srand(time(NULL));
-//					float h = frand();
-//
-//					m_hPos[i * 4] = 1.1f*smallParticleRadius+1.1f*2.0f*x*smallParticleRadius+(2.0*h-1.0)*0.1f*smallParticleRadius;// 0.0005f+ x * 0.001f + (2.0*h-1.0)*0.0001f;
-//					m_hPos[i * 4 + 1] = 1.1f*smallParticleRadius+1.1f*2.0f*y*smallParticleRadius;// 0.0005f + y*0.001f;
-//					m_hPos[i * 4 + 2] = 1.1f*smallParticleRadius+1.1f*2.0f*z*smallParticleRadius+(2.0*h-1.0)*0.1f*smallParticleRadius;//0.0005f + z * 0.001f + (2.0*h - 1.0)*0.0001f;
-//					m_hPos[i * 4 + 3] = smallParticleRadius;// 0.0005f + (2.0*h - 1.0)*0.00005f;
-//
-//					m_hVelm[i * 4] = 0.0f;
-//					m_hVelm[i * 4 + 1] = 0.0f;
-//					m_hVelm[i * 4 + 2] = 0.0f;
-//					m_hVelm[i * 4 + 3] = 0.0f;
-//
-//					m_hOmegVel[i * 4] = 0.0f;
-//					m_hOmegVel[i * 4 + 1] = 0.0f;
-//					m_hOmegVel[i * 4 + 2] = 0.0f;
-//					m_hOmegVel[i * 4 + 3] = 0.0f;
-//
-//					m_hOmegAcl[i * 4] = 0.0f;
-//					m_hOmegAcl[i * 4 + 1] = 0.0f;
-//					m_hOmegAcl[i * 4 + 2] = 0.0f;
-//					m_hOmegAcl[i * 4 + 3] = 0.0f;
-//
-//					m_hAcl[i * 4] = 0.0f;
-//					m_hAcl[i * 4 + 1] = 0.0f;
-//					m_hAcl[i * 4 + 2] = 0.0f;
-//					m_hAcl[i * 4 + 3] = 0.0f;
-//
-//					m_hOmegVelm[i * 4] = 0.0f;
-//					m_hOmegVelm[i * 4 + 1] = 0.0f;
-//					m_hOmegVelm[i * 4 + 2] = 0.0f;
-//					m_hOmegVelm[i * 4 + 3] = 0.0f;
-//
-//					m_hVel[i * 4] = 0.0f;
-//					m_hVel[i * 4 + 1] = 0.0f;
-//					m_hVel[i * 4 + 2] = 0.0f;
-//					m_hVel[i * 4 + 3] = 1.0f;
-//
-//					m_hCol[i * 4] = 1.0f;
-//					m_hCol[i * 4 + 1] = 0.0f;
-//					m_hCol[i * 4 + 2] = 0.0f;
-//					m_hCol[i * 4 + 3] = 1.0f;
-//
-//					m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i * 4 + 3], 3) * 2500.0f;
-//
-//					i++;
-//
-//					if (i >= m_numParticles)
-//					{
-//						goto set;
-//					}
-//				}
-//			}
-//		}
-
 	std::cout << "addParticles" << std::endl;
 	int i = 0;
 
@@ -1204,7 +1145,7 @@ ParticleSystem::addParticles()
 //				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.1f*smallParticleRadius + smallParticleRadius; //size bidisperse
 //				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 2500.0f; //size bi
 				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.2f*smallParticleRadius + smallParticleRadius; //density bidisperse
-				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) *  1.0f * 500.0f; //density bi
+				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) *  1.0f * RHO_L; //density bi
 				m_hCol[i*4] = 1.0;
 				m_hCol[i*4+1] = 0.2;   // Particle colors (RED)
 				m_hCol[i*4+2] = 0.2;
@@ -1215,7 +1156,7 @@ ParticleSystem::addParticles()
 //				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.1f*largeParticleRadius + largeParticleRadius; //size bidisperse
 //				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 2500.0f; //size bidisperse
 				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.2f*largeParticleRadius + largeParticleRadius; //Density bi
-				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 1.0f * 3500.0f; //Density bi
+				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 1.0f * RHO_H; //Density bi
 				m_hCol[i*4] = 0.2;
 				m_hCol[i*4+1] = 0.2;    // Particle colors (BLUE)
 				m_hCol[i*4+2] = 1.0;
@@ -1228,98 +1169,8 @@ ParticleSystem::addParticles()
 		}
 		while (i < (int)m_numParticles);
 
-		//vertically layered locations
-//		i = 0;
-//		float nratio = m_params.inletRatio * (1.0f / m_params.sizeratio);
-//		float ratio = nratio / (1 + nratio);
-//		do
-//		{
-//			float h = frand();
-//			if (i<(int)m_numParticles*(ratio)){
-//				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.1f*largeParticleRadius + largeParticleRadius; //size bidisperse
-//				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 2500.0f; //size bi
-////				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.2f*smallParticleRadius + smallParticleRadius; //density bidisperse
-////				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) *  0.2f * 2500.0f; //density bi
-////				m_hCol[i*4] = 1.0;	// Particle colors (RED)
-////				m_hCol[i*4+1] = 0.2;
-////				m_hCol[i*4+2] = 0.2;
-////				m_hCol[i*4+3] = 1.0;
-//				m_hCol[i*4] = 0.2;	// Particle colors (BLUE)
-//				m_hCol[i*4+1] = 0.2;
-//				m_hCol[i*4+2] = 1.0;
-//				m_hCol[i*4+3] = 1.0;
-//				m_hVel[int(i)*4+3] = 2.0f;
-////				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 1.0f * 2500.0f;
-//			}
-//			else {
-//				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.1f*smallParticleRadius + smallParticleRadius; //size bidisperse
-//				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 2500.0f; //size bidisperse
-////				m_hPos[i*4+3] = (2.0f*h - 1.0f) * 0.2f*largeParticleRadius + largeParticleRadius; //Density bi
-////				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 1.8f * 2500.0f; //Density bi
-//				m_hCol[i*4] = 1.0;
-//				m_hCol[i*4+1] = 0.2;   // Particle colors (RED)
-//				m_hCol[i*4+2] = 0.2;
-//				m_hCol[i*4+3] = 1.0;
-////				m_hCol[i*4] = 0.2;	// Particle colors (BLUE)
-////				m_hCol[i*4+1] = 0.2;
-////				m_hCol[i*4+2] = 1.0;
-////				m_hCol[i*4+3] = 1.0;
-//				m_hVel[int(i)*4+3] = 1.0f;
-////				m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 1.0f * 2500.0f;
-//
-//			}
-//			//m_hMass[i] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[i*4+3],3) * 2500.0f;
-//			i++;
-//		}
-//		while (i < int(m_numParticles));
 
-
-	// Second particle
-
-	//m_hPos[1 * 4] = 0.0f;
-	//m_hPos[1 * 4 + 1] = 0.1f;
-	//m_hPos[1 * 4 + 2] = 0.05199999f;
-	//m_hPos[1 * 4 + 3] = 0.0005f;
-
-	//m_hVelm[1 * 4] = 0.0f;
-	//m_hVelm[1 * 4 + 1] = 0.0f;
-	//m_hVelm[1 * 4 + 2] = 0.0f;
-	//m_hVelm[1 * 4 + 3] = 0.0f;
-
-	//m_hOmegVel[1 * 4] = 0.0f;
-	//m_hOmegVel[1 * 4 + 1] = 0.0f;
-	//m_hOmegVel[1 * 4 + 2] = 0.0f;
-	//m_hOmegVel[1 * 4 + 3] = 0.0f;
-
-	//m_hOmegAcl[1 * 4] = 0.0f;
-	//m_hOmegAcl[1 * 4 + 1] = 0.0f;
-	//m_hOmegAcl[1 * 4 + 2] = 0.0f;
-	//m_hOmegAcl[1 * 4 + 3] = 0.0f;
-
-	//m_hAcl[1 * 4] = 0.0f;
-	//m_hAcl[1 * 4 + 1] = 0.0f;
-	//m_hAcl[1 * 4 + 2] = 0.0f;
-	//m_hAcl[1 * 4 + 3] = 0.0f;
-
-	//m_hOmegVelm[1 * 4] = 0.0f;
-	//m_hOmegVelm[1 * 4 + 1] = 0.0f;
-	//m_hOmegVelm[1 * 4 + 2] = 0.0f;
-	//m_hOmegVelm[1 * 4 + 3] = 0.0f;
-
-	//m_hVel[1 * 4] = 0.0f;
-	//m_hVel[1 * 4 + 1] = 0.0f;
-	//m_hVel[1 * 4 + 2] = -1.0f;
-	//m_hVel[1 * 4 + 3] = 1.0f;
-
-	//m_hCol[1 * 4] = 1.0f;
-	//m_hCol[1 * 4 + 1] = 0.0f;
-	//m_hCol[1 * 4 + 2] = 0.0f;
-	//m_hCol[1 * 4 + 3] = 1.0f;
-
-
-	//m_hMass[1] = 4.0f / 3.0f * CUDART_PI_F * powf(m_hPos[1*4+3],3) * 2500.0f;
-
-set:
+//set:
 
 	setArray(POSITION, m_hPos, 0, m_numParticles);
 	setArray(ACCELERATION, m_hAcl, 0, m_numParticles);
