@@ -1,3 +1,7 @@
 # NWDEM
-GPU COMPUTE CAPABILITY IS SET TO 5.3 DUE TO THE LIMITATION OF CUDA7.5.
- CODE TESTED ON UBUNTU 14.04 LTS RUNNING WITH GTX1080TI 
+
+To install: sh install.sh
+ 
+GPU compute capability is set to 5.0 by default for "Maxwell architecture".   
+
+Code has been tested on Ubuntu 14.04 LTS running with GTX980, GTX1080TI.    
