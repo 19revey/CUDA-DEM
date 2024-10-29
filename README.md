@@ -11,7 +11,7 @@ This code implements a Discrete Element Method simulation that runs on CUDA-enab
 ## Setup & Configuration
 1. Clone this repository
 2. Edit the Makefile:
-   - Specify your CUDA compiler path (#TODO: Set CUDA and g++ path)
+   - Specify your CUDA compiler path (search #TODO in makefile to Set CUDA and g++ path)
    - Adjust CUDA architecture flags if needed
 
 ## Building & Running
