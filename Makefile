@@ -33,8 +33,8 @@
 #
 ################################################################################
 
-# Location of the CUDA Toolkit
-CUDA_PATH ?= "/usr/local/cuda-8.5"  				# TODO: change CUDA path
+# TODO: change CUDA path
+CUDA_PATH ?= /usr/local/cuda-8.0
 
 ##############################
 # start deprecated interface #
@@ -228,9 +228,17 @@ endif
 ################################################################################
 
 # Target rules
+SRC_DIR := ./src
+OBJ_DIR := ./obj
+BIN_DIR := ./bin
+
 all: build
 
-build: particles
+build: makedirs $(BIN_DIR)/particles
+
+# Add this new target to create directories
+makedirs:
+	$(EXEC) mkdir -p $(OBJ_DIR) $(BIN_DIR)
 
 check.deps:
 ifeq ($(SAMPLE_ENABLED),0)
@@ -239,31 +247,29 @@ else
 	@echo "Sample is ready - all dependencies have been met"
 endif
 
-particleSystem.o:src/particleSystem.cpp
+$(OBJ_DIR)/particleSystem.o: $(SRC_DIR)/particleSystem.cpp
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-particleSystem_cuda.o:src/particleSystem_cuda.cu
+$(OBJ_DIR)/particleSystem_cuda.o: $(SRC_DIR)/particleSystem_cuda.cu
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-particles.o:src/particles.cpp
+$(OBJ_DIR)/particles.o: $(SRC_DIR)/particles.cpp
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-render_particles.o:src/render_particles.cpp
+$(OBJ_DIR)/render_particles.o: $(SRC_DIR)/render_particles.cpp
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-shaders.o:src/shaders.cpp
+$(OBJ_DIR)/shaders.o: $(SRC_DIR)/shaders.cpp
 	$(EXEC) $(NVCC) $(INCLUDES) $(ALL_CCFLAGS) $(GENCODE_FLAGS) -o $@ -c $<
 
-particles: particleSystem.o particleSystem_cuda.o particles.o render_particles.o shaders.o
+$(BIN_DIR)/particles: $(OBJ_DIR)/particleSystem.o $(OBJ_DIR)/particleSystem_cuda.o $(OBJ_DIR)/particles.o $(OBJ_DIR)/render_particles.o $(OBJ_DIR)/shaders.o
 	$(EXEC) $(NVCC) $(ALL_LDFLAGS) $(GENCODE_FLAGS) -o $@ $+ $(LIBRARIES)
-	$(EXEC) mkdir -p ./bin
-	$(EXEC) mv $@ ./bin/
 
 run: build
 	$(EXEC) ./bin/particles
 
 clean:
-	rm -f particles particleSystem.o particleSystem_cuda.o particles.o render_particles.o shaders.o
-	rm -rf ./bin/particles
+	rm -f $(OBJ_DIR)/*.o $(BIN_DIR)/particles
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 clobber: clean
